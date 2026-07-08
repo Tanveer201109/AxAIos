@@ -1,0 +1,30 @@
+name: CTx Auto Build & Deploy
+
+on:
+  push:
+    branches: pull_request:
+    branches: jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: npm install  # যদি npm দরকার না হয়, এই লাইন ডিলিট করো
+
+    - name: Build
+      run: echo "Building CTx dashboard..."  # তোমার বিল্ড কমান্ড দাও (যেমন: npm run build)
+
+    - name: Deploy to GitHub Pages (optional)
+      if: github.ref == 'refs/heads/main'
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./  # index.html যেখানে আছে

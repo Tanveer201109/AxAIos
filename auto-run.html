@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>CTx - Auto Run</title>
+  <style>body{background:#000;color:#0f0;font-family:monospace;padding:20px;}</style>
+</head>
+<body>
+  <h1>CTx অটোমেটিক জেনারেট মোড - লাইভ</h1>
+  <p>স্ট্যাটাস: <span id="status">জেনারেট হচ্ছে...</span></p>
+  <script>
+    document.getElementById('status').innerText = "রানিং! সময়: " + new Date().toLocaleString('bn-BD');
+    setInterval(() => {
+      document.getElementById('status').innerText = "লাইভ আপডেট: " + Math.random().toFixed(4) + " | রানিং...";
+    }, 2000);
+  </script>
+</body>
+</html>
