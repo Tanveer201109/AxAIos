@@ -3,162 +3,306 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>xAI Grok - Sign in</title>
-    <script src="https://kit.fontawesome.com/8b4b6e9a2f.js" crossorigin="anonymous"></script>
+    <title>xAI Workspace - Fixed Login</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600&display=swap');
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background: linear-gradient(135deg, #0a0a0a, #000000);
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle, #553816 0%, #170e05 70%, #000000 100%);
             height: 100vh;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            font-family: Arial, sans-serif;
+            color: #ffffff;
             overflow: hidden;
         }
 
-        .xai-window {
-            width: 460px;
-            background: #111111;
-            border: 1px solid #333;
-            border-radius: 18px;
-            box-shadow: 0 30px 80px rgba(0, 255, 204, 0.15);
-            overflow: hidden;
-        }
-
-        .title-bar {
-            background: #1a1a1a;
-            padding: 12px 20px;
+        /* --- ফিক্সড সাইডবার --- */
+        .sidebar-container {
+            width: 70px;
+            background-color: #0b0a0a;
+            border-right: 4px solid #1a1919;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-        }
-        .xai-logo { font-size: 26px; color: #00ffcc; }
-        .control { width: 13px; height: 13px; border-radius: 50%; }
-        .control.min { background: #ffbd2e; }
-        .control.max { background: #28ca42; }
-        .control.close { background: #ff5f56; }
-
-        .login-content { padding: 50px 40px; text-align: center; }
-
-        .logo { font-size: 62px; margin-bottom: 10px; }
-
-        .premium-badge {
-            display: inline-block;
-            background: linear-gradient(90deg, #00ffcc, #00ccff);
-            color: #000;
-            padding: 5px 18px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 20px;
+            padding: 10px 0;
+            height: 100%;
+            z-index: 10;
         }
 
-        /* ==================== ROLLING SHINE + SPLASH LIGHT ==================== */
-        .rolling-shine-container {
-            margin: 30px 0;
-        }
-        .rolling-shine {
+        .small-logo-box {
+            width: 45px;
+            height: 45px;
+            border: 2px solid #ffffff;
             display: flex;
             justify-content: center;
-            gap: 25px;
-            padding: 16px 40px;
-            background: #1a1a1a;
-            border: 1px solid #444;
-            border-radius: 50px;
+            align-items: center;
+            background-color: #000;
             position: relative;
             overflow: hidden;
-        }
-        .rolling-shine::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -150%;
-            width: 80%;
-            height: 200%;
-            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), #facc15, #22c55e, transparent);
-            animation: splashRoll 2.8s linear infinite;
-        }
-        @keyframes splashRoll {
-            0%   { transform: translateX(-120%); }
-            100% { transform: translateX(500%); }
+            margin-bottom: 15px;
+            cursor: pointer;
         }
 
-        input {
-            width: 100%; padding: 16px; background: #1f1f1f;
-            border: 1px solid #444; border-radius: 12px; color: white;
-            font-size: 16px; margin-bottom: 18px;
-        }
-        input:focus { border-color: #00ffcc; }
+        .small-logo-box span { font-weight: bold; font-size: 22px; letter-spacing: -2px; }
 
-        .login-btn {
-            width: 100%; padding: 17px; 
-            background: linear-gradient(90deg, #00ffcc, #00ccff);
-            color: #000; font-weight: 700; border: none; 
-            border-radius: 12px; font-size: 17px; cursor: pointer;
-            position: relative;
+        .small-logo-box::before {
+            content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transform: skewX(-25deg); animation: shine 3s infinite linear;
+        }
+        @keyframes shine { 0% { left: -100%; } 20% { left: 100%; } 100% { left: 100%; } }
+
+        .sidebar-dynamic-content { flex: 1; width: 100%; display: flex; flex-direction: column; align-items: center; overflow: hidden; }
+        .vertical-black-bar { width: 45px; height: 95%; background-color: #000; border: 2px solid #222; border-radius: 2px; }
+        
+        /* ডাইনামিক স্ক্রলিং লাইন নম্বর কন্টেইনার */
+        .line-numbers-wrapper {
+            display: none;
+            width: 100%;
+            height: calc(100vh - 195px);
+            margin-top: 110px;
             overflow: hidden;
+            position: relative;
         }
-        .login-btn::before {
-            content: '';
+        .line-numbers-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             position: absolute;
-            top: -50%; left: -150%;
-            width: 60%; height: 200%;
-            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent);
-            animation: splashRoll 2s linear infinite;
+            width: 100%;
+            top: 0;
+            transition: transform 0.1s ease-out;
         }
-        .login-btn:hover { transform: translateY(-3px); }
+        .line-numbers-container span {
+            font-size: 14px; background: #fff; color: #000; width: 30px; height: 22px;
+            line-height: 22px; text-align: center; font-weight: bold; border-radius: 2px;
+            margin-bottom: 21px; font-family: 'Courier New', monospace;
+        }
+
+        /* --- কন্টেন্ট চেঞ্জার এরিয়া --- */
+        .content-wrapper { flex: 1; position: relative; height: 100%; }
+
+        /* ১. লগিন স্ক্রিন */
+        .login-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.5s ease, transform 0.5s ease; z-index: 5;
+        }
+        .main-logo-container { position: relative; display: flex; justify-content: center; align-items: center; margin-bottom: 25px; }
+        .logo-center-line { position: absolute; width: 14px; height: 220px; background-color: #000; border: 2px solid #332313; z-index: 1; }
+        .big-logo-art { font-size: 150px; font-weight: 900; font-style: italic; color: #000; text-shadow: -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff; position: relative; z-index: 2; font-family: 'Impact', sans-serif; letter-spacing: -10px; }
+        .logo-wing { position: absolute; top: 25px; left: 55px; width: 160px; height: 60px; border-top: 5px solid #fff; border-radius: 100% 0 0 0; transform: rotate(-25deg); z-index: 3; }
+        .logo-wing-2 { position: absolute; top: 38px; left: 60px; width: 130px; height: 40px; border-top: 3px solid #fff; border-radius: 100% 0 0 0; transform: rotate(-22deg); z-index: 3; }
+
+        .social-login-bar {
+            width: 280px; height: 50px; background: linear-gradient(to right, #25282e 0%, #111215 100%);
+            border: 2px solid #222; border-radius: 25px; display: flex; justify-content: space-around; align-items: center; padding: 0 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.7); z-index: 4;
+        }
+        .social-icon { font-size: 20px; transition: transform 0.2s; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+        .fa-google { color: #4285F4; }
+        .fa-windows { color: #00A4EF; }
+        .fa-facebook-f { color: #1877F2; }
+        .fa-apple { color: #ffffff; }
+        .social-icon:hover { transform: scale(1.2); }
+        
+        /* X SVG আইকনের নির্দিষ্ট সাইজ */
+        .x-svg-icon {
+            width: 18px;
+            height: 18px;
+            fill: #ffffff;
+        }
+
+        /* ২. নোটবুক স্ক্রিন */
+        .notebook-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; padding: 15px; box-sizing: border-box;
+            opacity: 0; transform: scale(0.95); pointer-events: none; transition: opacity 0.5s ease, transform 0.5s ease; z-index: 1;
+        }
+
+        /* টপ হেডার বার */
+        .top-bar { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; height: 75px; }
+        
+        .header-left-group { display: flex; flex-direction: column; gap: 8px; }
+        .notebook-title { border: 2px solid #ffffff; padding: 6px 15px; font-size: 16px; font-weight: bold; background-color: #000; letter-spacing: 2px; font-family: 'Courier New', monospace; width: fit-content; }
+        
+        /* ফাইল কন্ট্রোল বাটন টুলবার */
+        .file-controls { display: flex; gap: 8px; }
+        .btn-control { background: #000; border: 1px solid #555; color: #fff; padding: 4px 10px; font-size: 11px; cursor: pointer; text-transform: uppercase; font-family: 'Courier New', monospace; font-weight: bold; transition: background 0.2s; }
+        .btn-control:hover { background: #332313; border-color: #fff; }
+
+        .info-box { border: 2px solid #555; background-color: rgba(0, 0, 0, 0.8); padding: 8px 15px; text-align: right; font-size: 13px; font-family: 'Courier New', monospace; min-width: 320px; }
+        .editable-input { background: transparent; border: none; color: #fff; font-family: 'Courier New', monospace; font-size: 13px; text-align: right; width: 70%; outline: none; border-bottom: 1px dashed #555; }
+        .editable-input:focus { border-bottom: 1px solid #fff; color: #ffca28; }
+
+        /* নোটবুক খাতা */
+        .notebook-body { flex: 1; border: 2px solid #555; background-color: rgba(0, 0, 0, 0.75); position: relative; overflow: hidden; }
+        
+        .notebook-textarea {
+            width: 100%; height: 100%; background: transparent; border: none; outline: none; color: #ffffff;
+            font-family: 'Courier New', Courier, monospace; font-size: 16px; line-height: 43px;
+            padding: 10px 20px 40px 20px; box-sizing: border-box; resize: none; overflow-y: scroll;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px); background-size: 100% 43px;
+        }
+
+        /* স্ট্যাটাস বার (পেজ ও লাইন কাউন্টার) */
+        .status-bar { background-color: #0b0a0a; border: 1px solid #333; padding: 5px 15px; font-size: 12px; font-family: 'Courier New', monospace; display: flex; justify-content: space-between; color: #aaa; margin-top: 5px; }
+
+        /* অ্যাক্টিভ স্টেট টগল */
+        .logged-in .login-screen { opacity: 0; transform: scale(1.05); pointer-events: none; }
+        .logged-in .notebook-screen { opacity: 1; transform: scale(1); pointer-events: auto; z-index: 6; }
     </style>
 </head>
 <body>
 
-    <div class="xai-window">
-        <div class="title-bar">
-            <div class="flex items-center gap-3">
-                <span class="xai-logo">✦</span>
-                <span class="font-bold text-xl">xAI Grok</span>
-            </div>
-            <div class="flex gap-2">
-                <div class="control min"></div>
-                <div class="control max"></div>
-                <div class="control close"></div>
-            </div>
+    <!-- বাম পাশের ফিক্সড সাইডবার -->
+    <div class="sidebar-container">
+        <div class="small-logo-box" onclick="logout()" title="লগআউট করতে এখানে ক্লিক করুন">
+            <span>xI</span>
         </div>
-
-        <div class="login-content">
-            <div class="logo">🚀</div>
-            <h1 class="text-3xl font-semibold mb-2">Sign in to xAI</h1>
-            <div class="premium-badge">PREMIUM</div>
-            <p class="text-gray-400">xAilink.ai + Gemini Earth Mode</p>
-
-            <!-- Rolling Shine with Splash Light -->
-            <div class="rolling-shine-container">
-                <div class="rolling-shine">
-                    <i class="fa-brands fa-google text-2xl" style="color:#4285f4"></i>
-                    <i class="fa-brands fa-x-twitter text-2xl" style="color:#fff"></i>
-                    <i class="fa-brands fa-apple text-2xl" style="color:#fff"></i>
+        
+        <div class="sidebar-dynamic-content">
+            <div class="vertical-black-bar" id="blackBar"></div>
+            
+            <!-- ডাইনামিক স্ক্রলিং লাইন নম্বর এরিয়া -->
+            <div class="line-numbers-wrapper" id="rulerWrapper">
+                <div class="line-numbers-container" id="lineContainer">
+                    <!-- জাভাস্ক্রিপ্ট দিয়ে ডাইনামিকালি ১ থেকে লাইন রেন্ডার হবে -->
                 </div>
-            </div>
-
-            <input type="text" placeholder="Email or phone number" id="email">
-            <input type="password" placeholder="Password" id="password">
-
-            <button class="login-btn" onclick="fakeLogin()">Sign in to Grok Premium</button>
-
-            <div class="mt-8 text-sm text-gray-500">
-                <a href="#" class="text-[#00ffcc]">Forgot password?</a> • 
-                <a href="#" class="text-[#00ffcc]">Create account</a>
             </div>
         </div>
     </div>
 
-    <script src="env-loader.js"></script>
-    
+    <!-- ডান পাশের কন্টেন্ট কন্টেইনার -->
+    <div class="content-wrapper" id="mainWrapper">
+        
+        <!-- ১. লগিন স্ক্রিন সেকশন -->
+        <div class="login-screen">
+            <div class="main-logo-container">
+                <div class="logo-center-line"></div>
+                <div class="big-logo-art">xA</div>
+                <div class="logo-wing"></div>
+                <div class="logo-wing-2"></div>
+            </div>
+
+            <div class="social-login-bar">
+                <a class="social-icon" onclick="login()"><i class="fab fa-google"></i></a>
+                <a class="social-icon" onclick="login()"><i class="fab fa-windows"></i></a>
+                <a class="social-icon" onclick="login()"><i class="fab fa-facebook-f"></i></a>
+                
+                <!-- এখানে ফন্ট আইকনের বদলে সরাসরি X-এর অফিশিয়াল SVG লোগো বসানো হয়েছে -->
+                <a class="social-icon" onclick="login()">
+                    <svg class="x-svg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                </a>
+                
+                <a class="social-icon" onclick="login()"><i class="fab fa-apple"></i></a>
+            </div>
+        </div>
+
+        <!-- ২. নোটবুক স্ক্রিন সেকশন -->
+        <div class="notebook-screen">
+            <div class="top-bar">
+                <div class="header-left-group">
+                    <div class="notebook-title">NOTE BOOK 2026</div>
+                    <div class="file-controls">
+                        <button class="btn-control" onclick="newFile()"><i class="fas fa-file-medical"></i> New File</button>
+                        <button class="btn-control" onclick="focusEditor()"><i class="fas fa-edit"></i> Edit File</button>
+                        <button class="btn-control" onclick="appendTemplate()"><i class="fas fa-file-import"></i> Add Template</button>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <div>DATE: <input type="text" class="editable-input" value="07/11/2026" id="noteDate"></div>
+                    <div>SUBJECT: <input type="text" class="editable-input" value="SPACE XAI ROCKETE" id="noteSubject"></div>
+                </div>
+            </div>
+
+            <div class="notebook-body">
+                <textarea class="notebook-textarea" id="notepad" onscroll="syncScroll()" oninput="updateCounts()" placeholder="এখানে আপনার নোট লিখুন...">-EXAMPLE: line-no-1_ =-MY NAME IS MD TANVEER ARSALAN, MY FATHER MONOMOHON AND MY MOTHER NAME, IS MUNJURY BEGUM MONIRA , DATE OF BIRTH: 18 JUN 1998, VILLAGE: SOUTH PATUAPARA, KANAIKHALI, NATORE</textarea>
+            </div>
+
+            <div class="status-bar">
+                <div id="pageCount">CURRENT PAGE: 1 / TOTAL PAGES: 1</div>
+                <div id="lineCount">TOTAL LINES: 1 | CURRENT LINE: 1</div>
+            </div>
+        </div>
+
+    </div>
+
     <script>
-        function fakeLogin() {
-            const email = document.getElementById('email').value;
-            if (email) {
-                alert("✅ xAI Grok Premium Activated!\n\n🌍 Gemini Earth Rolling Shine Active");
-                console.log("%c✦ xAI PREMIUM + ROLLING SPLASH LIGHT ACTIV...
+        const notepad = document.getElementById('notepad');
+        const lineContainer = document.getElementById('lineContainer');
+
+        function generateLineNumbers() {
+            lineContainer.innerHTML = '';
+            for (let i = 1; i <= 150; i++) {
+                const span = document.createElement('span');
+                span.innerText = i;
+                lineContainer.appendChild(span);
+            }
+        }
+
+        function syncScroll() {
+            lineContainer.style.top = `-${notepad.scrollTop}px`;
+            updateCounts();
+        }
+
+        function updateCounts() {
+            const text = notepad.value;
+            const lines = text.split('\n').length;
+            
+            const cursorPosition = notepad.selectionStart;
+            const textBeforeCursor = text.substring(0, cursorPosition);
+            const currentLine = textBeforeCursor.split('\n').length;
+
+            const totalPages = Math.max(1, Math.ceil(lines / 20));
+            const currentPage = Math.max(1, Math.ceil(currentLine / 20));
+
+            document.getElementById('lineCount').innerText = `TOTAL LINES: ${lines} | CURRENT LINE: ${currentLine}`;
+            document.getElementById('pageCount').innerText = `CURRENT PAGE: ${currentPage} / TOTAL PAGES: ${totalPages}`;
+        }
+
+        function newFile() {
+            if(confirm("আপনি কি নতুন ফাইল খুলতে চান? বর্তমান ডাটা মুছে যাবে।")) {
+                notepad.value = '';
+                document.getElementById('noteSubject').value = 'NEW SUBJECT';
+                updateCounts();
+                notepad.focus();
+            }
+        }
+
+        fnction focusEditor() {
+            notepad.focus();
+        }
+
+        function appendTemplate() {
+            notepad.value += "\n\n// --- NEW TEMPLATE ADDED ---\nSubject: " + document.getElementById('noteSubject').value + "\nDate: " + document.getElementById('noteDate').value;
+            updateCounts();
+            notepad.focus();
+        }
+
+        function login() {
+            document.getElementById('mainWrapper').classList.add('logged-in');
+            document.getElementById('blackBar').style.display = 'none';
+            document.getElementById('rulerWrapper').style.display = 'block';
+            generateLineNumbers();
+            setTimeout(updateCounts, 100);
+        }
+
+        function logout() {
+            if(confirm("আপনি কি লগআউট করতে চান?")) {
+                document.getElementById('mainWrapper').classList.remove('logged-in');
+                document.getElementById('blackBar').style.display = 'block';
+                document.getElementById('rulerWrapper').style.display = 'none';
+            }
+        }
+
+        notepad.addEventListener('keyup', updateCounts);
+        notepad.addEventListener('click', updateCounts);
+    </script>
+</body>
+</html>
