@@ -11,10 +11,9 @@ COPY index.html /usr/share/nginx/html/index.html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 
-2. **workflow.yml** (পথ: .github/workflows/deploy.yml)  
+2. **workflow.yml.github/workflows/deploy.yml)  
    এইটা পুরোটা পেস্ট করো:
 
-```yaml
 name: Deploy CTx Docker
 
 on:
